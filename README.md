@@ -1,2 +1,3 @@
-# wallpaper-mac
+# Wallpaper
+
 Wallpaper cli for macOS
