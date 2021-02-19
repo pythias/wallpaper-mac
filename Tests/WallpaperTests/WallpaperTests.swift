@@ -26,10 +26,9 @@ final class WallpaperTests: XCTestCase {
         process.waitUntilExit()
 
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = String(data: data, encoding: .utf8)
-        let json = JSON(output!)
+        let json = try JSON(data: data)
         
-        XCTAssertTrue(json[0]["id"] > 0)
+        XCTAssertTrue((json.array![0] as JSON)["id"] > 0)
     }
     
     func testSet() throws {
@@ -55,9 +54,9 @@ final class WallpaperTests: XCTestCase {
         process.waitUntilExit()
 
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = String(data: data, encoding: .utf8)
+        let json = try JSON(data: data)
         
-        XCTAssertEqual(output, "")
+        XCTAssertTrue(json["error"].exists());
     }
 
     /// Returns path to the built products directory.

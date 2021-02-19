@@ -35,7 +35,8 @@ final class SetCommand: Command {
             }
         }
         
-        stderr <<< "Error: screen \(id) is not exists."
+        let json = JSON(["error": "Screen \(id) is not exists."])
+        stdout <<< "\(json.rawString()!)"
     }
 }
 
