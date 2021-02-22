@@ -4,6 +4,7 @@
 import PackageDescription
 
 let package = Package(
+    version: "1.0.0",
     name: "Wallpaper",
     dependencies: [
         // Dependencies declare other packages that this package depends on.
