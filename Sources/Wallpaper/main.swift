@@ -20,22 +20,29 @@ final class GetCommand: Command {
 final class SetCommand: Command {
     let name = "set"
 
-    @Param var id: Int
-    @Param var path: String
-
+    @Key("-i", "--id", description: "Screen Id.")
+    var id: Int?
+    
+    @Key("-p", "--path", description: "Wallpaper file location.")
+    var path: String?
+    
     func execute() throws {
-        let options = [NSWorkspace.DesktopImageOptionKey: Any]()
         for screen in NSScreen.screens {
-            let number = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as! CGDirectDisplayID
+            let workspace = NSWorkspace.shared
+            guard let options = workspace.desktopImageOptions(for: screen) else {
+                return
+            }
+            
+            let number = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? Int
             if number == id {
-                try NSWorkspace.shared.setDesktopImageURL(URL.init(fileURLWithPath: path), for: screen, options: options)
-                let json = JSON(["id": id, "path" : path])
+                try workspace.setDesktopImageURL(URL.init(fileURLWithPath: path ?? ""), for: screen, options: options)
+                let json = JSON(["id": id ?? 0, "path" : path ?? ""])
                 stdout <<< "\(json.rawString()!)"
                 return;
             }
         }
         
-        let json = JSON(["error": "Screen \(id) is not exists."])
+        let json = JSON(["error": "Screen \(String(describing: id)) is not exists."])
         stdout <<< "\(json.rawString()!)"
     }
 }

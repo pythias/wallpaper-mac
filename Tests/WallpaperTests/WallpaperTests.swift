@@ -45,7 +45,7 @@ final class WallpaperTests: XCTestCase {
 
         let process = Process()
         process.executableURL = fooBinary
-        process.arguments = ["set", "1", "file"]
+        process.arguments = ["set", "-i", "1", "-p", "file"]
 
         let pipe = Pipe()
         process.standardOutput = pipe
